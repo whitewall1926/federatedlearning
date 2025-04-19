@@ -1,0 +1,21 @@
+# 忽略 CIFAR-10 数据文件及目录
+
+# 如果整个 dataset 文件夹不希望上传，也可以添加：
+dataset/
+fashion_mnist_dataset/
+
+mnist_dataset/
+
+data/
+
+fashion_mnist_dataset/
+
+*.pth
+
+wandb/
+
+.vscode/
+
+__pycache__/
+
+log_data/

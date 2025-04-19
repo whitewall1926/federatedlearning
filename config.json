@@ -1,0 +1,46 @@
+{
+    "attention:": "remember to update the configuration",
+    
+    "train": {
+        "architecture": "CNN",
+        "local_epoch": 2,
+        "global_rounds": 400,
+        "batch_size": 64,
+        "num_clients": 10,
+        "client_ratio":0.3
+    },
+    "model": "Mnist_CNN",
+
+    "optimizer": {
+        "kind":"sgd",
+        "learning_rate": 0.001
+    },
+    
+    "dataset": {
+        "name": "mnist",
+        "distribution": "long_tail",
+        "alpha": 0.9
+    },
+    "strategy": {
+        "iwds": {
+            "beta": 0.99,
+            "beta_zero": 0.9999,
+            "rou": 0.992,
+            "enabled":false
+        },
+        "client_gini":{
+            "limit_rounds": 30,
+            "enabled":true,
+            "reverse":true
+        },
+        "client_random": {
+            "enabled":true
+        }
+    },
+    
+    "system": {
+        "device": "cuda",
+        "seed": 46,
+        "log_dir": "log_data"
+    }
+}
