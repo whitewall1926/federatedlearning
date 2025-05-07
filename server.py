@@ -25,6 +25,27 @@ class Server:
         if config is not None:
             self.config = config
     
+    def select_clients_random(self):
+        selected_clients = int(self.client_ratio * len(self.clients))
+        # 使用PyTorch生成随机排列
+        rand_indxs = torch.randperm(len(self.clients)).tolist()
+        print(f'using select_clients_random\n selected clients: {rand_indxs[:selected_clients]}')
+        return rand_indxs[:selected_clients]
+    
+    def select_clients_loss(self, roud, limit_rounds=0):
+        selected_clients = int(self.client_ratio * len(self.clients))
+        loss_clients = []
+        for client_id in range(10):
+            loss_clients.append((self.clients[client_id].get_loss(), client_id))
+        loss_clients.sort(reverse=True)
+        rand_indxs = []
+        for i in range(selected_clients):
+            rand_indxs.append(loss_clients[i][1])
+        
+        print(f'using select_clients_loss\n selected clients{rand_indxs}')
+
+        return rand_indxs
+        
     def select_clients_dynamic(self, roud, limit_rounds=0):
 
         selected_clients = int(self.client_ratio * len(self.clients))
@@ -49,7 +70,8 @@ class Server:
         prob_t = torch.tensor([(1 - alpha) * p + p  / N for p in prob])
         print(prob_t)
         rand_indxs = list(torch.multinomial(prob_t, selected_clients, replacement=False))
-        print(rand_indxs)
+        print(f'the gini value of selected clients : {[gini_clients[i][0] for i in rand_indxs]}')
+        print(f'selected clinets : {rand_indxs}')
        
         return rand_indxs
         
@@ -115,7 +137,8 @@ class Server:
 
             # rand_indxs = self.select_clients(t, limit_rounds=limit_rounds)
             rand_indxs = self.select_clients_dynamic(t, limit_rounds=limit_rounds)
-
+            # rand_indxs = self.select_clients_loss(t, limit_rounds=limit_rounds)
+            # rand_indxs = self.select_clients_random()
             for i in rand_indxs:
                 client = self.clients[i]
                 

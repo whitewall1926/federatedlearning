@@ -26,19 +26,21 @@ def main():
     lr_list = [0.001]
     
     for lr in lr_list:
-        save_path = 'log_data/config.json'
-        with open(save_path, 'w', encoding="utf-8") as f:
-            json.dump(config, f, ensure_ascii=False, indent=4)
+        #save_path = 'log_data/config.json'
+        #with open(save_path, 'w', encoding="utf-8") as f:
+        #    json.dump(config, f, ensure_ascii=False, indent=4)
         config['optimizer']['learning_rate'] = lr
-        name = f"""mnist_lr{config['optimizer']['learning_rate']}
-                    _long_tail_alpha_{config["dataset"]['alpha']}_random_resample_gini_clients_randseed{config['system']['seed']}"""
+        name_gini = f"""mnist_lr{config['optimizer']['learning_rate']}
+                    _long_tail_alpha_{config["dataset"]['alpha']}_random_resample_dynamic_random_clients_clients{config["dataset"]['alpha']}_randseed{config['system']['seed']}"""
+        name_loss = f"""mnist_lr{config['optimizer']['learning_rate']}
+                    _long_tail_alpha_{config["dataset"]['alpha']}_random_resample_random_clients_clients{config["dataset"]['alpha']}_randseed{config['system']['seed']}"""
+        
         with wandb.init(
             project = "test-fl",
             entity= "whitewall_9-jinan-university",
-            name=f"""mnist_lr{config['optimizer']['learning_rate']}
-                    _long_tail_alpha_{config["dataset"]['alpha']}_random_resample_dynamic_gini_reverse_clients_clients{config["dataset"]['alpha']}_randseed{config['system']['seed']}""",
+            name= name_gini,
             config=config,
-            notes=f"under the mnist, to observe the effect of alpha{config['dataset']['alpha']}, i predict that iwds+reverse gini  > baseline > iwds > gini reverse",
+            notes=f"to observe the gini value",
             # tags= [''],
         ) as run:
             print(run.config)

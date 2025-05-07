@@ -8,7 +8,7 @@ import matplotlib.pylab as plt
 from torch.utils.tensorboard import SummaryWriter
 import wandb
 
-def load_config(config_path=r'D:\Save\test-fl\config.json'):
+def load_config(config_path=r'./config.json'):
     """
     加载JSON格式的配置文件
     

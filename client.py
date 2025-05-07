@@ -11,7 +11,10 @@ class Client:
         self.train_dataset = TensorDataset(datas, torch.as_tensor(labels))
         self.train_dataloader = None
         self.local_model = None
-        
+        self.loss = 10
+    def get_loss(self):
+        return self.loss
+    
     def cal_gini(self):
         labels = self.train_dataset.tensors[1].numpy().tolist()
         labels_num = [ labels.count(c) for c in range(10)]
@@ -76,7 +79,10 @@ class Client:
         loss_func = torch.nn.CrossEntropyLoss()
         # opti = torch.optim.Adam(net.parameters(), lr=0.001)
         opti = torch.optim.SGD(net.parameters(), lr=lr)
+        avg_loss = 0.0
         for epoch in range(local_epochs):
+            running_loss = 0.0
+            total_batches = 0
             for data, label in self.train_data_loader:
                 data, label = data.to(device), label.to(device)
                 opti.zero_grad()
@@ -84,7 +90,12 @@ class Client:
                 loss = loss_func(output, label)
                 loss.backward()
                 opti.step()
-                
+
+                running_loss += loss.item()
+                total_batches += 1
+            avg_loss = running_loss / total_batches
+            
+        self.loss = avg_loss 
         self.local_model = net
         return net.state_dict()
 

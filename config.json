@@ -19,7 +19,7 @@
     "dataset": {
         "name": "mnist",
         "distribution": "long_tail",
-        "alpha": 0.9
+        "alpha": 0.5
     },
     "strategy": {
         "iwds": {
@@ -30,11 +30,11 @@
         },
         "client_gini":{
             "limit_rounds": 30,
-            "enabled":true,
+            "enabled":false,
             "reverse":true
         },
         "client_random": {
-            "enabled":true
+            "enabled": true
         }
     },
     
