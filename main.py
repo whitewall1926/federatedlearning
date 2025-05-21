@@ -105,7 +105,6 @@ def main():
                                                         torch.as_tensor(test_labels)), 
                                                         batch_size = run.config['train']['batch_size'])
 
-            
             clients_train_data, clients_train_label = create_long_tail_split_noniid(train_data=train_data,
                                                                                 train_labels=train_labels,
                                                                                 alpha=run.config['dataset']['alpha'],
