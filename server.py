@@ -149,7 +149,8 @@ class Server:
                                    local_batch_size = local_batch_size,
                                    beta=beta_t,
                                    lr=learning_rate,
-                                   iwds_enabled = self.config['strategy']['iwds']['enabled'])
+                                   iwds_enabled = self.config['strategy']['iwds']['enabled'],
+                                   rho=self.config['train']['pll_rho'])
                 self.w[i] = client.local_model.state_dict()
             self.aggregate_model_parameters(rand_indxs)
             accuracy, loss = self.eval_model(t)

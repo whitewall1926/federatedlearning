@@ -24,7 +24,11 @@ def main():
     config = load_config()
     
     lr_list = [0.001]
-    
+    os.environ['HTTP_PROXY'] = 'http://127.0.0.1:7897'
+    os.environ['HTTPS_PROXY'] = 'http://127.0.0.1:7897'
+
+    # os.environ["WANDB_MODE"] = "offline"
+
     for lr in lr_list:
         #save_path = 'log_data/config.json'
         #with open(save_path, 'w', encoding="utf-8") as f:
@@ -34,13 +38,17 @@ def main():
                     _long_tail_alpha_{config["dataset"]['alpha']}_random_resample_dynamic_random_clients_clients{config["dataset"]['alpha']}_randseed{config['system']['seed']}"""
         name_loss = f"""mnist_lr{config['optimizer']['learning_rate']}
                     _long_tail_alpha_{config["dataset"]['alpha']}_random_resample_random_clients_clients{config["dataset"]['alpha']}_randseed{config['system']['seed']}"""
-        
+        name_pll = f"""pll_rho{config['train']['pll_rho']}_mnist_lr{config['optimizer']['learning_rate']}
+                    _long_tail_alpha_{config["dataset"]['alpha']}_random_resample_random_clients_clients{config["dataset"]['alpha']}_randseed{config['system']['seed']}"""
+
         with wandb.init(
             project = "test-fl",
             entity= "whitewall_9-jinan-university",
-            name= name_gini,
+            name= name_pll,
             config=config,
-            notes=f"to observe the gini value",
+            # notes=f"to observe the gini value",
+            settings=wandb.Settings(init_timeout=120)
+
             # tags= [''],
         ) as run:
             print(run.config)
@@ -124,7 +132,7 @@ def main():
             model = get_model()
             # model = VGG9(num_classes=10)
             for i in range(10):
-                clients.append(Client(i, clients_train_data[i], clients_train_label[i]))
+                clients.append(Client(i, clients_train_data[i], clients_train_label[i], ))
             server = Server(rounds=run.config['train']['global_rounds'], 
                             clients=clients, 
                             test_dataloader=test_data_loader,  

@@ -4,10 +4,11 @@
     "train": {
         "architecture": "CNN",
         "local_epoch": 2,
-        "global_rounds": 400,
+        "global_rounds": 100,
         "batch_size": 64,
         "num_clients": 10,
-        "client_ratio":0.3
+        "client_ratio": 0.3,
+        "pll_rho": 0.4
     },
     "model": "Mnist_CNN",
 
@@ -26,11 +27,11 @@
             "beta": 0.99,
             "beta_zero": 0.9999,
             "rou": 0.992,
-            "enabled":false
+            "enabled": false
         },
         "client_gini":{
-            "limit_rounds": 30,
-            "enabled":false,
+            "limit_rounds": 0,
+            "enabled":true,
             "reverse":true
         },
         "client_random": {
